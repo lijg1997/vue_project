@@ -7,7 +7,7 @@
 
 <script>
 import Mock from 'mockjs';
-import EleHeader from './components/ele_header';
+import EleHeader from 'components/ele_header';
 export default {
   name: 'App',
   components: { EleHeader }
