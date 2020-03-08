@@ -1,6 +1,6 @@
-import EleGoods from 'pages/ele_goods.vue';
-import EleRatings from 'pages/ele_retings.vue';
-import EleSellers from 'pages/ele_sellers.vue';
+import EleGoods from 'pages/ele-goods/ele_goods.vue';
+import EleRatings from 'pages/ele-ratings/ele_ratings.vue';
+import EleSellers from 'pages/ele-sellers/ele_sellers.vue';
 
 export default [
   { path: '/goods', component: EleGoods },

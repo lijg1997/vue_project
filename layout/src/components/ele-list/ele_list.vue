@@ -11,19 +11,11 @@
 
 <script>
 import EleIcon from '../ele-icon/ele_icon'
-import axios from 'axios'
 export default {
-  data(){
-    return {
-      supports:[]
-    }
+  props:{
+    supports:Array
   },
   components:{EleIcon},
-  async mounted() {
-    const body = await axios.get('/api/sellers')
-    // console.log(body.data.supports)
-    this.supports = body.data.supports
-  },
 };
 </script>
 

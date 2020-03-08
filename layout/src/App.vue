@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <EleHeader />
+    <EleHeader :sellers="sellers" />
     <div class="navs">
       <div class="item">
         <router-link to="/goods">商品</router-link>
@@ -21,13 +21,27 @@ import Mock from "mockjs";
 import EleHeader from "components/ele-header/ele_header";
 export default {
   name: "App",
-  components: { EleHeader }
+  data(){
+    return {
+      sellers:{},
+      
+    }
+  },
+  components: { EleHeader },
+  async mounted() {   
+    const body = await this.axios.get('/api/sellers')
+    // console.log(body.data)
+    this.sellers = body.data
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
 @import "./common/stylus/mixin.styl"
 #app
+  position relative
+  width 100%
+  height 100%
   .navs
     one-px(skyblue)
     display flex

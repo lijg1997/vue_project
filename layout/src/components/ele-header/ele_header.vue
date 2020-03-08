@@ -1,55 +1,57 @@
 <template>
   <div class="header">
     <div class="top">
-      <img class="avatar" :src="dataObj.avatar" alt="img">
+      <img class="avatar" :src="sellers.avatar" alt="img">
       <div class="info">
         <div class="title">
           <i class="brand"></i>
-          <span class="name">{{dataObj.name}}</span>
+          <span class="name">{{sellers.name}}</span>
         </div>
         <div class="des">
-          <span class="desInfo">{{dataObj.description}}/{{dataObj.deliveryTime}}分钟</span>
+          <span class="desInfo">{{sellers.description}}/{{sellers.deliveryTime}}分钟</span>
         </div>
-        <div class="support">
+        <div class="support" v-if="sellers.supports">
           <!-- <i class="icon"></i> -->
-          <EleIcon :size="1" :type="dataObj.supports[0].type"></EleIcon>
-          <span class="text">{{dataObj.supports[0].content}}</span>
+          <EleIcon :size="1" :type="sellers.supports[0].type"></EleIcon>
+          <span class="text">{{sellers.supports[0].content}}</span>
         </div>
       </div>
-      <div class="btn" @click="showMask">
-        <span class="text">{{dataObj.supports.length}}个</span>
+      <div class="btn" @click="show = true" v-if="sellers.supports">
+        <span class="text">{{sellers.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right right"></i>
       </div>
     </div>
-    <div class="bulletin">
+    <div class="bulletin" @click="show = true">
       <div class="left">
         <i class="icon"></i>
-        <span class="text">{{dataObj.bulletin}}</span>
+        <span class="text">{{sellers.bulletin}}</span>
       </div>
       <i class="icon-keyboard_arrow_right right"></i>
     </div>
     <div class="bg">
-      <img :src="dataObj.avatar" alt="img">
+      <img :src="sellers.bgImg" alt="img">
     </div>
-    <div class="mask" v-show="show">
-      <div class="main-wrap">
-        <div class="main">
-          <div class="title">嘉禾一品（温都水城）</div>
-          <div class="stars">
-            <EleStars :score="dataObj.score"></EleStars>
-          </div>
-          <EleLine class="line"><template><span>优惠信息</span></template></EleLine>
-          <EleList class="list"></EleList>
-          <EleLine class="line"><template><span>商家公告</span></template></EleLine>
-          <div class="bulletin">
-            {{dataObj.bulletin}}
+    <transition name="mask">
+      <div class="mask" v-show="show">
+        <div class="main-wrap">
+          <div class="main">
+            <div class="title">嘉禾一品（温都水城）</div>
+            <div class="starsWrap">
+              <EleStars :size="36" :score="sellers.score"></EleStars>
+            </div>
+            <EleLine class="line"><template><span>优惠信息</span></template></EleLine>
+            <EleList class="list" :supports="sellers.supports"></EleList>
+            <EleLine class="line"><template><span>商家公告</span></template></EleLine>
+            <div class="bulletin">
+              {{sellers.bulletin}}
+            </div>
           </div>
         </div>
+        <div class="footer">
+          <i class="icon-close" @click="show = false"></i>
+        </div>
       </div>
-      <div class="footer">
-        <i class="icon-close" @click="closeMask"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -58,28 +60,16 @@ import EleIcon from 'components/ele-icon/ele_icon'
 import EleLine from 'components/ele-line/ele_line'
 import EleList from 'components/ele-list/ele_list'
 import EleStars from 'components/ele-stars/ele_stars'
-import axios from 'axios'
 export default {
+  props:{
+    sellers:Object
+  },
   data() {
     return {
       show:false,
-      dataObj:{}
     };
   },
   components:{EleIcon, EleLine, EleList, EleStars},
-  methods: {
-    showMask(){
-      this.show = true
-    },
-    closeMask(){
-      this.show = false
-    }
-  },
-  async beforeCreate() {
-    const body = await axios.get('/api/sellers')
-    // console.log(body.data)
-    this.dataObj = body.data
-  },
 };
 </script>
 
@@ -105,6 +95,8 @@ export default {
       vertical-align top
       display inline-block
       color #fff
+      @media screen and (mim-width:320px), (max-width 360px)
+        max-width 200px
       .title
         font-size 16px
         margin 2px 0 8px
@@ -124,6 +116,7 @@ export default {
       .support
         font-size 10px
         margin 10px 0 2px
+        overflowHidden()
         .text
           vertical-align top 
     .btn
@@ -192,7 +185,6 @@ export default {
     background-color rgba(7,17,27,.8)
     z-index 9
     backdrop-filter blur(3px)
-    transition all 5s linear 
     .main-wrap
       min-height 100%
       .main
@@ -204,11 +196,10 @@ export default {
           font-weight 700
           text-align center
           color rgba(255,255,255,1)
-        .stars
-          width 100%
-          height 24px
+        .starsWrap
           margin-top  16px
           margin-bottom 28px
+          text-align center
         .line
           width 80%
           margin 0 auto  
