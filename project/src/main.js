@@ -11,8 +11,10 @@ import '@/common/stylus/transition.styl'
   const body = await axios.get('/api/sellers')
   console.log(body)
 })() */
+Vue.prototype.bus = new Vue()
 Vue.prototype.axios = axios
 Vue.config.productionTip = false
+
 
 new Vue({
   render: h => h(App),

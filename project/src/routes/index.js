@@ -1,9 +1,9 @@
 import EleGoods from 'pages/eleGoods/eleGoods.vue'
 import EleRatings from 'pages/eleRatings/eleRatings.vue'
-import EleSellers from 'pages/eleSellers/eleSellers.vue'
+import EleSeller from 'pages/eleSeller/eleSeller.vue'
 export default [
   {path:'/goods', component:EleGoods},
   {path:'/ratings', component:EleRatings},
-  {path:'/sellers', component:EleSellers},
+  {path:'/seller', component:EleSeller},
   {path:'/', redirect:'/goods'}
 ]

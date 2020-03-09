@@ -1,6 +1,6 @@
 <template>
 <div class="food">
-  <div class="picture">
+  <div class="foodImg">
     <img :src="food.image" alt="img">
   </div>
   <div class="info">
@@ -15,12 +15,12 @@
       <span class="oldPrice">{{food.oldPrice}}</span>
     </span>
   </div>
-  <EleControl class="control" :food="food"></EleControl>
+  <EleControl class="controls" :food="food"></EleControl>
 </div>
 </template>
 
 <script>
-import EleControl from '../ele-control/ele_control'
+import EleControl from '../eleControl/eleControl'
 export default {
   props:{
     food:Object
@@ -33,7 +33,7 @@ export default {
 .food
   padding 18px
   display flex
-  .picture
+  .foodImg
     flex 0 0 60px
     height 60px
     margin-right 10px
@@ -41,31 +41,29 @@ export default {
       width 100%
       height 100%
   .info
+    flex 1
+    font-size 12px
+    color rgb(147,153,159)
     display flex
     flex-direction column
-    font-size 10px
-    color rgb(147,153,159)
     .name
-      margin 2px 0 8px
       line-height 14px
-      font-size 14px
       color rgb(7,17,27)
-    .description 
-      line-height 14px
-    .ratings 
+      margin 1px 0 8px
+    .ratings  
       margin 8px 0
       .sellCount
         margin-right 12px
-    .prices  
-      font-weight 700
-      line-height 24px
+    .prices
       .price
+        line-height 24px
         font-size 14px
         color red
-        margin-right 8px  
+        font-weight 700
+        margin-right 8px
       .oldPrice
         text-decoration line-through
-  .control
+  .controls
     flex 0 0 0
 
 </style>

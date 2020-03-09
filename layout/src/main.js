@@ -6,8 +6,10 @@ import axios from './api'
 import './common/stylus/style.styl'
 import './common/stylus/transition.styl'
 
-Vue.prototype.axios = axios
 Vue.config.productionTip = false;
+Vue.prototype.axios = axios
+Vue.prototype.bus = new Vue()
+
 
 new Vue({
   router,

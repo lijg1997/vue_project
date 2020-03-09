@@ -1,8 +1,8 @@
 <template>
   <div class="goods">
     <div class="typeWrap" ref="typeWrap">
-      <ul class="typeList">
-        <li class="typeItem" v-for="(item, index) in goods" @click="handleClick(index)"
+      <ul class="typeList" ref="typeList">
+        <li class="typeItem" v-for="(item, index) in goods" @click="handleCToTypeItem(index)"
           :key="index" :class="{active:currentIndex===index}">
           <EleIcon class="icon" v-if="item.type>=0"
             :size="3" :type="item.type"></EleIcon>
@@ -11,7 +11,7 @@
       </ul>
     </div>
     <div class="foodsWrap" ref="foodsWrap">
-      <ul class="foodsList">
+      <ul class="foodsList" ref="foodList">
         <li class="foodsItem" v-for="(good, index) in goods" :key="index">
           <div class="title"><span class="text">{{good.name}}</span></div>
           <ul class="foodList">
@@ -22,45 +22,92 @@
         </li>
       </ul>
     </div>
+    <EleCart class="cart" :selectedFoods="selectedFoods" :sellers="sellers"></EleCart>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import EleIcon from 'components/ele-icon/ele_icon'
 import EleFood from 'components/ele-food/ele_food'
-import BScroll from 'better-scroll'
-
+import EleCart from 'components/ele-cart/ele_cart'
 const OK = 0
 export default {
+  props:{
+    sellers:Object
+  },
   data() {
     return {
-      goods:[]
+      goods:[],
+      tops:[],
+      scrollY:0
     };
   },
   methods: {
-    handleClick(index){
-      console.log(1111)
-      this.currentIndex = index
-      console.log(index)
+    // 初始化滚动条
+    initScroll(){
+      this.typeScroll = new BScroll(this.$refs.typeWrap, {click:true})
+      this.foodsScroll = new BScroll(this.$refs.foodsWrap, {probeType:3, click:true})
+      this.foodsScroll.on('scroll', ({x,y}) => {
+        this.scrollY = Math.abs(y)
+      })
+    },
+    // 初始化top
+    initTops(){
+      let top = 0
+      let tops = [top]
+      let foodsItem = this.$refs.foodList.children
+      Array.from(foodsItem).forEach((item) => {
+        top += item.offsetHeight
+        tops.push(top)
+      })
+      this.tops = tops
+    },
+    // 点击左侧导航右侧滑动
+    handleCToTypeItem(index){
+      let top = this.tops[index]
+      this.foodsScroll.scrollTo(0, -top, 500)
     }
   },
-  components:{EleIcon, EleFood},
+  components:{EleIcon, EleFood, EleCart},
   async mounted() {
     const {errno, data:goods} = await this.axios.get('/api/goods')
     if(errno === OK) this.goods = goods
-    new BScroll(this.$refs.typeWrap)
-    new BScroll(this.$refs.foodsWrap)
+    // 下一次DOM更新时触发的回调，确保所有的DOM节点都可以获取到
+    this.$nextTick(() => {
+      this.initScroll()
+      this.initTops()
+    })
+    // 添加商品数量
+    this.bus.$on('handleIncrement', (food) => {
+      if(food.count) food.count++
+      else this.$set(food, 'count', 1)
+    })
+    this.bus.$on('handleDecrement', (food) => {
+      if(food.count) food.count--
+    })
   },
   computed: {
-    currentIndex:{
-      get(){
-        
-        return 3
-      },
-      set(val){
-        console.log(val)
-      }    
-    }
+    currentIndex(){
+      let {tops, scrollY} = this
+      let index = 0
+      index = tops.findIndex((item, index) => scrollY >= item && scrollY < tops[index + 1])
+      if(this.oldIndex !== index){
+        let targetLi =  this.$refs.typeList.children[index]
+        this.typeScroll && this.typeScroll.scrollToElement(targetLi, 300)
+        this.oldIndex = index
+      }
+      return index
+    },
+    selectedFoods(){
+      let selectedFoods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if(food.count > 0) selectedFoods.push(food)
+        })
+      })
+      return selectedFoods
+    }   
   },
 };
 </script>
@@ -118,5 +165,12 @@ export default {
             &:last-child
               .food
                 last-none()
-            
+  .cart
+    flex 0 0 0
+    position fixed
+    left 0
+    bottom 0      
+    width 100%
+    height 46px
+    background-color #141d27    
 </style>

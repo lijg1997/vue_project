@@ -12,7 +12,7 @@
         <router-link to="/sellers">商家</router-link>
       </div>
     </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
     }
   },
   components: {
-    EleHeader
+    EleHeader,
   },
   async mounted() {
     const {errno, data:seller} = await this.axios.get('/api/seller')
@@ -39,6 +39,9 @@ export default {
 <style scoped lang="stylus">
 @import "./common/stylus/mixin.styl"
 #app
+  position relative
+  width 100%
+  height 100%
   .navs
     one-px(rgba(7,17,27,.2))
     display flex
