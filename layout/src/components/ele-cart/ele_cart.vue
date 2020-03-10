@@ -13,14 +13,33 @@
   <div class="right" :class="{active:selectedMoney >= sellers.minPrice}">
     <span v-if="rightText">{{rightText}}</span>
   </div>
+  <div class="balls">
+    <transition name="balls" v-for="(ball, index) in ballsShowArr" :key="index"
+      @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+      <i class="ball" v-show="ball.show"></i>
+    </transition>
+  </div>
 </div>
 </template>
 
 <script>
+import {transform} from '../../util/transition'
 export default {
   props:{
     selectedFoods:Array,
     sellers:Object
+  },
+  data(){
+    return {
+      ballsShowArr:[
+        {show: false},
+        {show: false},
+        {show: false},
+        {show: false},
+        {show: false}
+      ],
+      animationArr:[]
+    }
   },
   computed: {
     selectedMoney(){
@@ -42,6 +61,53 @@ export default {
       else if(this.selectedMoney < this.sellers.minPrice) return `还差￥${this.sellers.minPrice - this.selectedMoney}起送`
       else return `去提交`
     }
+  },
+  methods: {
+    ballsAnimition(target){
+      for(let i = 0; i < this.ballsShowArr.length; i++){
+        let ball = this.ballsShowArr[i]
+        if(!ball.show){
+          ball.show = true
+          ball.target = target
+          this.animationArr.push(ball)
+          return
+        }
+      }
+    },
+    beforeEnter(el){
+      let count = this.ballsShowArr.length
+      while(count--){
+        let ball = this.ballsShowArr[count]
+        if(ball.show){
+          let viewH = document.documentElement.clientHeight
+          let targetRect  = ball.target.getBoundingClientRect()
+          let X = targetRect.left - 28
+          let Y = -(viewH- targetRect.top - 38)
+          transform(el, 'translateX', X)
+          transform(el, 'translateY', Y)
+          break
+        }
+      }
+    },
+    enter(el){
+      let hook = el.offsetHeight
+      this.$nextTick(() => {
+        transform(el, 'translateX', 0)
+        transform(el, 'translateY', 0)
+      })
+    },
+    afterEnter(el){
+      const ball = this.animationArr.shift()
+      if(ball.show){
+        ball.show = false
+        el.style.display = 'none'
+      }
+    }
+  },
+  mounted() {
+    this.bus.$on('ballsAnimition', (target) => {
+      this.ballsAnimition(target)
+    })
   },
 };
 </script>
@@ -120,4 +186,14 @@ export default {
       background-color green
       span 
         color rgb(255,255,255)
+  .balls 
+    .ball
+      position absolute
+      left 32px
+      top 11px
+      width 16px
+      height 16px
+      border-radius 50%
+      background-color red
+      transition transform .5s linear   
 </style>

@@ -16,8 +16,9 @@ export default {
     food:Object
   },
   methods: {
-    handleIncrement(){
+    handleIncrement(event){
       this.bus.$emit('handleIncrement', this.food)
+      this.bus.$emit('ballsAnimition', event.target)
     },
     handleDecrement(){
       this.bus.$emit('handleDecrement', this.food)
