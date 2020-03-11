@@ -67,5 +67,8 @@ export default {
         text-decoration line-through
   .control
     flex 0 0 0
+    position absolute
+    right 5px
+    bottom 18px
 
 </style>

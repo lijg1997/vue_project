@@ -1,0 +1,30 @@
+.maskShow-enter
+  opacity 0 !important
+.maskShow-enter-active
+  transition opacity .3s linear !important
+.maskShow-enter-to
+  opacity 1 !important
+.maskShow-leave
+  opacity 1 !important
+.maskShow-leave-active
+  transition opacity .3s linear !important
+.maskShow-leave-to
+  opacity 0 !important
+
+
+.removeCount-enter
+  opacity 0 !important
+  transform translateX(48px) rotate(0) !important
+.removeCount-enter-active
+  transition all .3s linear !important
+.removeCount-enter-to
+  opacity 1 !important
+  transform translateX(0) rotate(-360deg) !important
+.removeCount-leave
+  opacity 1 !important
+  transform translateX(0) rotate(-360deg) !important
+.removeCount-leave-active
+  transition all .3s linear !important
+.removeCount-leave-to
+  opacity 0 !important
+  transform translateX(48px) rotate(0) !important

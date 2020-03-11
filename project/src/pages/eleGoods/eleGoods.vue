@@ -20,7 +20,7 @@
       </li>
     </ul>
   </div>
-  <EleCart class="cart" :selectedFoodCount="selectedFoodCount" :seller="seller"></EleCart>
+  <EleCart class="cart" :selectedFoodCount="selectedFoodCount" :seller="seller" @clear="clear"></EleCart>
 </div>
 </template>
 
@@ -89,6 +89,11 @@ export default {
         tops.push(top)
       })
       this.tops = tops
+    },
+    clear(){
+      this.selectedFoodCount.forEach((selectedFood) => {
+        selectedFood.count = 0
+      })
     }
   },
   async mounted() {
@@ -173,12 +178,4 @@ export default {
             &:last-child
               .food
                 last-none()  
-  .cart
-    flex 0 0 0
-    position fixed
-    left 0
-    bottom 0
-    height 46px
-    width 100%
-    background #141d27
 </style>

@@ -22,7 +22,7 @@
         </li>
       </ul>
     </div>
-    <EleCart class="cart" :selectedFoods="selectedFoods" :sellers="sellers"></EleCart>
+    <EleCart :selectedFoods="selectedFoods" :sellers="sellers" @clear="clear"></EleCart>
   </div>
 </template>
 
@@ -67,6 +67,11 @@ export default {
     handleCToTypeItem(index){
       let top = this.tops[index]
       this.foodsScroll.scrollTo(0, -top, 500)
+    },
+    clear(){
+      this.selectedFoods.forEach((selectedFood) => {
+        selectedFood.count = 0
+      })
     }
   },
   components:{EleIcon, EleFood, EleCart},
@@ -165,12 +170,4 @@ export default {
             &:last-child
               .food
                 last-none()
-  .cart
-    flex 0 0 0
-    position fixed
-    left 0
-    bottom 0      
-    width 100%
-    height 46px
-    background-color #141d27    
 </style>

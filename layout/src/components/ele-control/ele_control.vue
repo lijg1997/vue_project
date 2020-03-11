@@ -29,9 +29,6 @@ export default {
 
 <style scoped lang="stylus">
 .control
-  position absolute
-  right 5px
-  bottom 18px
   i 
     vertical-align middle
     display inline-block

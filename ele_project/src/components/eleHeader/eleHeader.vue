@@ -32,10 +32,19 @@
   <div class="bg">
     <img :src="seller.bgImg" alt="bg">
   </div>
-  <transition name="mask">
+  <transition name="maskShow">
     <div v-show="maskShow" class="mask">
       <div class="maskWrap">
-        <div class="maskMain"></div>
+        <div class="maskMain">
+          <div class="title">{{seller.name}}</div>
+          <div class="starsWrap">
+            <EleStar :size="48" :score="seller.score"></EleStar>
+          </div>
+          <EleLine class="line"><span class="text">优惠信息</span></EleLine>
+          <EleList class="list" :supports="seller.supports"></EleList>
+          <EleLine class="line"><span class="text">商家公告</span></EleLine>
+          <div class="bulletin"><span class="text">{{seller.bulletin}}</span></div>
+        </div>
       </div>
       <div class="closeBtn">
         <i class="icon-close" @click="maskShow=false"></i>
@@ -47,6 +56,9 @@
 
 <script>
 import EleIcon from '../eleIcon/eleIcon'
+import EleLine from '../eleLine/eleLine'
+import EleList from '../eleList/eleList'
+import EleStar from '../eleStar/eleStar'
 export default {
   props:{
     seller:Object
@@ -56,7 +68,12 @@ export default {
       maskShow:false
     };
   },
-  components:{EleIcon}
+  components:{
+    EleIcon, 
+    EleLine,
+    EleList,
+    EleStar
+  }
 };
 </script>
 
@@ -69,7 +86,7 @@ export default {
   position relative
   overflow hidden
   &>.top
-    padding 24px 0 24px 18px
+    padding 24px 0 18px 24px
     display flex
     .shopImg
       width 64px
@@ -148,7 +165,7 @@ export default {
         bg-image(bulletin)
     .right
       margin-right 12px
-  .bg      
+  &>.bg      
     position absolute
     left 0
     top 0
@@ -159,7 +176,7 @@ export default {
     img 
       width 100%
       height 100%
-  .mask
+  &>.mask
     position fixed
     left 0
     top 0
@@ -168,8 +185,40 @@ export default {
     z-index 9
     background-color rgba(0,0,0,.8)
     backdrop-filter blur(3px)
+    overflow-y auto
     .maskWrap
       min-height 100%
+      .maskMain
+        padding 64px 36px 96px
+        color rgb(255,255,255)
+        .title
+          font-size 16px
+          font-weight 700px
+          line-height 16px
+          text-align center
+        .starsWrap
+          width 100%
+          height 24px
+          margin-top 16px
+        .line
+          width 100%
+          margin 28px 0 24px
+          .text
+            margin 0 12px
+            font-size 14px
+            font-weight 700
+            color rgb(255,255,255)  
+        .list
+          width 95%
+          margin 0 auto
+        .bulletin
+          width 95%
+          margin 0 auto
+          .text
+            font-size 12px
+            font-weight 200
+            color rgb(255,255,255)
+            line-height 24px  
     .closeBtn
       @extend .center
       width 100%

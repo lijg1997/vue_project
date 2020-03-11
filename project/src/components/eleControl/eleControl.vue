@@ -7,7 +7,7 @@
   <transition name="removeCount">
     <span class="count remove" v-show="food.count">{{food.count}}</span>
   </transition>
-  <i class="icon-add_circle" @click="handleIncrement"></i>
+  <i class="icon-add_circle add" @click="handleIncrement"></i>
 </div>
 </template>
 
@@ -17,8 +17,9 @@ export default {
     food:Object
   },
   methods: {
-    handleIncrement(){
+    handleIncrement(event){
       this.bus.$emit('handleIncrement', this.food)
+      this.bus.$emit('ballsAnimation', event.target)
     },
     handleDecrement(){
       this.bus.$emit('handleDecrement', this.food)
@@ -29,9 +30,6 @@ export default {
 
 <style scoped lang="stylus">
 .control
-  position absolute
-  right 0
-  bottom 18px
   i 
     display inline-block
     font-size 24px
@@ -49,4 +47,7 @@ export default {
     &.remove
       opacity 1
       transform translateX(0) rotate(-720deg)
+  .add
+    position relative
+    z-index 1    
 </style>
