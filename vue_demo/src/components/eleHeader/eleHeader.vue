@@ -1,6 +1,13 @@
 <template>
-    <div>
-        eleHeader
+    <div class="header">
+        <div class="top">
+            <div class="shopImg"></div>
+            <div class="info">
+                div
+
+            </div>
+        </div>
+        <div class="bottom"></div>
     </div>
 </template>
 
@@ -10,6 +17,6 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
 
 </style>

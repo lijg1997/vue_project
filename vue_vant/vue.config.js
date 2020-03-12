@@ -8,7 +8,7 @@ module.exports = {
     outputDir:'lijg',
     lintOnSave:false,
     devServer:{
-        port:3002,
+        port:8080,
         open:true
     },
     configureWebpack:{

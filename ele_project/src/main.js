@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from '@/App.vue'
+import App from '@/test.vue'
 import router from './router'
 import axios from './api'
 import '@/mock'
