@@ -68,11 +68,10 @@
                 this.showList = false;
                 this.showEdit = false;
                 let body = {};
-                if(this.isEdit){
-                    body = await this.axios.put('/contact/edit',{name, tel, id});
-                }else{
-                    body = await this.axios.post('/contact/new/json',{name, tel});
-                }
+                if(this.isEdit)
+                    body = await this.$http.contact.editContact({name, tel, id});
+                else
+                    body = await this.$http.contact.addContactByForm({name, tel});
                 await this.getUserInfo();
                 this.currentContactId = body.data.id
             },
@@ -80,9 +79,9 @@
                 this.showEdit = false;
                 this.showList = false;
                 this.isEdit = false;
-                const body = await this.axios.delete(`/contact`,{params:{id}});
+                const body = await this.$http.contact.delContact({id});
                 if(body.code === OK) {
-                    if(this.currentContactId === id) this.currentContactId = null
+                    if(this.currentContactId === id) this.currentContactId = null;
                     this.getUserInfo();
                 }
             },
@@ -90,8 +89,8 @@
                 return true
             },
             async getUserInfo(){
-                const {code, data:list} = await this.axios.get('/contactList');
-                if(code === OK) this.list = list;
+                const body = await this.$http.contact.getContactList();
+                if(body.code === OK) this.list = body.data;
             }
         },
         components: {

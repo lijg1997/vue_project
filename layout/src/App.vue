@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <EleHeader :sellers="sellers" />
+    <EleHeader />
     <div class="navs">
       <div class="item">
         <router-link to="/goods">商品</router-link>
@@ -12,27 +12,27 @@
         <router-link to="/sellers">商家</router-link>
       </div>
     </div>
-    <router-view :sellers="sellers"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Mock from "mockjs";
+import {mapState, mapActions} from 'vuex'
+import {GETSELLERS, GETGOODS} from './store/mutation_types'
 import EleHeader from "components/ele-header/ele_header";
 export default {
   name: "App",
-  data(){
-    return {
-      sellers:{},
-      
-    }
+  computed:{
+    ...mapState(['sellers'])
+  },
+  methods:{
+    ...mapActions([GETSELLERS,GETGOODS])
+  },
+  mounted() {
+    this[GETSELLERS]()
+    this[GETGOODS]()
   },
   components: { EleHeader },
-  async mounted() {   
-    const body = await this.axios.get('/api/sellers')
-    // console.log(body.data)
-    this.sellers = body.data
-  },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <EleHeader></EleHeader>
+        <EleHeader :seller="seller"></EleHeader>
         <div class="navs">
             <div>
                 <router-link to="/goods" class="link">商品</router-link>
@@ -18,8 +18,18 @@
 
 <script>
     import EleHeader from './components/eleHeader/eleHeader'
+    const OK = 0
     export default {
         name: "App",
+        data(){
+            return {
+                seller:{}
+            }
+        },
+        async mounted(){
+            const {errno, data:seller} = await this.axios.get('/api/seller')
+            if(errno === OK) this.seller = seller
+        },
         components:{
             EleHeader
         }

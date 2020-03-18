@@ -9,14 +9,33 @@ module.exports = {
     lintOnSave:false,
     devServer:{
         port:8080,
-        open:true
+        open:true,
+        proxy:{
+            '/4000':{
+                target:'http://localhost:4000',
+                ws:true,
+                changeOrigin:true,
+                pathRewrite:{
+                    '/4000':''
+                }
+            },
+            '/5000':{
+                target:'http://localhost:5000',
+                ws:true,
+                changeOrigin:true,
+                pathRewrite:{
+                    '/5000':''
+                }
+            }
+        }
     },
     configureWebpack:{
         resolve: {
             alias: {
                 '@': resolve('src'),
                 components: resolve('src/components'),
-                pages: resolve('src/pages')
+                pages: resolve('src/pages'),
+                store: resolve('src/store')
             }
         }
     }

@@ -56,13 +56,14 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import EleIcon from 'components/ele-icon/ele_icon'
 import EleLine from 'components/ele-line/ele_line'
 import EleList from 'components/ele-list/ele_list'
 import EleStars from 'components/ele-stars/ele_stars'
 export default {
-  props:{
-    sellers:Object
+  computed:{
+    ...mapState(['sellers'])
   },
   data() {
     return {

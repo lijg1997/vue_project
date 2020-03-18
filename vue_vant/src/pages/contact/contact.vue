@@ -68,24 +68,20 @@
                 this.showList = false;
                 this.showEdit = false;
                 let body = {};
-                if(this.isEdit){
-                    // this.list = this.list.map((item)=> item.id === info.id ? info : item )
-                    body = await this.axios.put('/contact/edit',{name, tel, id});
-                }else {
-                    // this.list.push(info);
-                    body = await this.axios.post('/contact/new/json',{name, tel});
-                }
+                if(this.isEdit)
+                    body = await this.$http.contact.editContact({name, tel, id});
+                else
+                    body = await this.$http.contact.addContactByForm({name, tel});
                 await this.getContactInfo();
                 this.currentContactId = body.data.id
             },
-            async onDelete(info){
+            async onDelete({id}){
                 this.showList = false;
                 this.showEdit = false;
                 this.isEdit = false;
-                // this.list = this.list.filter((item) => item.id !== info.id)
-                const body = await this.axios.delete(`/contact?id=${info.id}`);
+                const body = await this.$http.contact.delContact({id});
                 if(body.code === OK){
-                    if(this.currentContactId === info.id) this.currentContactId = null
+                    if(this.currentContactId === id) this.currentContactId = null;
                     this.getContactInfo();
                 }
             },
@@ -93,8 +89,9 @@
                 return true
             },
             async getContactInfo(){
-                const {code, data:list} = await this.axios.get('/contactList');
-                if(code === OK) this.list = list
+                const body = await this.$http.contact.getContactList();
+                console.log(body)
+                if(body.code === OK) this.list = body.data
             }
         },
         mounted() {
