@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {
+        name:'lijg',
+        age:23
+    };
+    Object.defineProperty(obj, 'wife', {
+        value:'wuruichao',
+        writable:true,
+        enumerable:false,
+        configurable:false
+    })
+    /*{
+        value: "wuruichao"
+        writable: true
+        enumerable: false
+        configurable: false
+    }*/
+    console.log(Object.getOwnPropertyDescriptor(obj, 'wife'));
+    console.log(obj);
+    for (let key in obj) {
+        console.log(key)
+    }
+
+    obj.wife = 'chaochao'
+    console.log(obj)
+    delete obj.wife
+    console.log(obj);
+</script>
+</body>
+</html>

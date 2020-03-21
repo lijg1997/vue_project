@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {
+        name:'lijg',
+        age:23,
+        get wife(){
+            console.log('get')
+            return this.__wife__
+        },
+        set wife(val){
+            console.log('set',val)
+            this.__wife__ = val
+        }
+    }
+    obj.wife
+    obj.wife = 'chaochao'
+    console.log(obj)
+</script>
+</body>
+</html>

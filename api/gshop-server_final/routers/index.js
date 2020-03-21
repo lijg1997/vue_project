@@ -18,6 +18,7 @@ test(router)
 密码登陆
  */
 router.post('/login_pwd', function (req, res) {
+  console.log(req.body)
   const name = req.body.name
   const pwd = md5(req.body.pwd)
   const captcha = req.body.captcha.toLowerCase()
@@ -144,7 +145,9 @@ router.post('/login_sms', function (req, res, next) {
  */
 router.get('/auto_login', function(req, res) {
   // 得到请求头中的token
+
   const token = req.headers['authorization']
+  // console.log(token)
   // 如果请求头中没有token, 直接返回  token=="null"
   if (token === '' || token === undefined) {
     return res.send({code: 1, msg: '请先登陆'})
@@ -152,8 +155,10 @@ router.get('/auto_login', function(req, res) {
 
   // 解码token, 如果失败或过了有效期, 返回401
   const decoded = jwt.decode(token, 'secret')
+  // console.log(decoded)
   if (!decoded || decoded.exp < Date.now() / 1000) {
     res.status(401)
+    // console.log('----')
     return res.json({ message: 'token过期，请重新登录' })
   }
 

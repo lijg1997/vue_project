@@ -1,22 +1,25 @@
 import Vue from 'vue'
 import App from '@/App'
+
+import http from '@/http'
 import router from '@/router'
+import store from '@/store'
+
+import HeaderTop from './components/headerTop/headerTop'
+import './util/validate'
 import '@/mock'
-import axios from '@/api'
 import '@/common/stylus/style.styl'
 import '@/common/stylus/transition.styl'
 
-/* import axios from 'axios'
-(async function(){
-  const body = await axios.get('/api/sellers')
-  console.log(body)
-})() */
+Vue.component('HeaderTop', HeaderTop);
 Vue.prototype.bus = new Vue()
-Vue.prototype.axios = axios
 Vue.config.productionTip = false
+Vue.prototype.$http = http
 
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')
+

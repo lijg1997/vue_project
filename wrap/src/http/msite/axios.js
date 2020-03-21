@@ -18,7 +18,7 @@ contact.interceptors.response.use((response)=>{
 }, (err)=>{
     // toast.fail();
     config.hooks && config.hooks.afterReq && config.hooks.afterReq();
-    return new Promise(()=>{})
+    return Promise.reject(err)
 });
 
 export default contact

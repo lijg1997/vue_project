@@ -1,36 +1,44 @@
 <template>
-    <div id="mainApp">
+    <div id="app">
         <EleHeader />
         <div class="navs">
             <div class="item">
-                <router-link to="/mainApp/goods">商品</router-link>
+                <router-link :to="`/main_app/${id}/goods`">商品</router-link>
             </div>
             <div class="item">
-                <router-link to="/mainApp/ratings">评价</router-link>
+                <router-link :to="`/main_app/${id}/ratings`">评价</router-link>
             </div>
             <div class="item">
-                <router-link to="/mainApp/sellers">商家</router-link>
+                <router-link :to="`/main_app/${id}/sellers`">商家</router-link>
             </div>
         </div>
-        <router-view></router-view>
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
     </div>
 </template>
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import {GETSELLERS, GETGOODS} from 'store/mutation_types'
+    import {GETSELLERS} from 'store/mutation_types'
     import EleHeader from "components/ele-header/ele_header";
     export default {
         name: "mainApp",
+        props:{
+            id:String
+        },
         computed:{
             ...mapState(['sellers'])
         },
         methods:{
-            ...mapActions([GETSELLERS,GETGOODS])
+            ...mapActions([GETSELLERS])
         },
-        mounted() {
-            this[GETSELLERS]()
-            this[GETGOODS]()
+        activated() {
+            this[GETSELLERS](this.id)
+        },
+        beforeRouteUpdate(to, from, next){
+            // console.log(to.params.id);
+            next()
         },
         components: { EleHeader },
     };
@@ -38,7 +46,7 @@
 
 <style lang="stylus" scoped>
     @import "../../common/stylus/mixin.styl"
-    #mainApp
+    #app
         position relative
         width 100%
         height 100%

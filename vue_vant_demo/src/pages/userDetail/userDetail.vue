@@ -1,11 +1,12 @@
 <template>
     <div>
         <van-button type="primary" @click="userLogout">退出登录</van-button>
+        <i class="shop-close close" @click="$router.back()"></i>
     </div>
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
+    import {mapState,mapActions} from 'vuex'
     import {LOGOUT} from '../../store/mutation_types'
     import {Button} from 'vant'
     export default {
@@ -17,13 +18,16 @@
             ...mapActions([LOGOUT]),
             userLogout(){
                 this[LOGOUT]();
-                localStorage.removeItem('ele-token');
-                this.$router.replace('/login')
             }
         }
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="stylus">
+    .close
+        font-size 30px
+        color skyblue
+        position fixed
+        right 10px
+        top 10px
 </style>

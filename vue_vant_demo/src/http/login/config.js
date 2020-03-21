@@ -31,5 +31,6 @@ export default {
                 token:()=>localStorage.getItem('ele-token')
             }
         },
-    }
+    },
+    cancleToast:true
 }

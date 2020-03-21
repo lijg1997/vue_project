@@ -6,9 +6,17 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+    import {AUTOLOGOUT} from 'store/mutation_types'
     import FooterGuide from 'components/footerGuide/footerGuide'
     export default {
         name: "App",
+        methods:{
+            ...mapActions([AUTOLOGOUT])
+        },
+        async mounted(){
+            await this[AUTOLOGOUT]()
+        },
         components:{
             FooterGuide
         }

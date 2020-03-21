@@ -90,7 +90,7 @@
     import 'swiper/css/swiper.min.css'
     import {mapState, mapActions} from 'vuex'
     import {GETADDRESSOBJ, GETCATEGORIES, GETSHOPS} from 'store/mutation_types'
-    import EleStar from 'components/ele-star/ele-star'
+    import EleStar from 'components/eleStar/eleStar'
     export default {
         name:'msite',
         computed:{

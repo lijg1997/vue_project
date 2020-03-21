@@ -7,15 +7,15 @@ export default {
             duration:0
         });
     },
-    success(){
+    success(val='success'){
         Toast.success({
-            message:'success',
-            duration:5000
+            message:val,
+            duration:1000
         });
     },
-    fail(){
+    fail(err='fail'){
         Toast.fail({
-            message:'success',
+            message:err,
             duration:1000
         });
     }

@@ -4,7 +4,7 @@
     <div class="left">
       <div class="icon">
         <div class="logo" :class="{active:selectedCount > 0}" @click="handleFlod">
-          <i class="icon-shopping_cart"></i>
+          <i class="shop-shopping_cart"></i>
         </div>
         <span class="bubble" v-show="selectedCount > 0">{{selectedCount}}</span>
       </div>

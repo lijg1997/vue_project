@@ -9,7 +9,7 @@
             <ul class="shop_list">
                 <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index">
                     <a>
-                        <div class="shop_left" v-if="shop.image_path">
+                        <div class="shop_left" v-if="shop.image_path" @click="$router.replace(`/main_app/${shop.id}`)">
                             <img class="shop_img" :src="imgBaseUrl + shop.image_path">
                         </div>
                         <div class="shop_right">
@@ -50,24 +50,23 @@
 </template>
 
 <script>
+    import {mapState, mapActions} from 'vuex'
+    import {GETSHOPS} from 'store/mutation_types'
     import BScroll from 'better-scroll'
     import EleStar from '../ele-star/ele_star'
     export default {
         name: "shopList",
-        props:{
-            shops:Array,
-            imgBaseUrl:String
+        computed:{
+            ...mapState(['shops','imgBaseUrl']),
         },
         methods:{
+            ...mapActions([GETSHOPS]),
             renderScroll(){
-                this.$nextTick(()=>{
-                    setTimeout(()=>{
-                        new BScroll(this.$refs.shopScroll, {click:true})
-                    })
-                })
+                new BScroll(this.$refs.shopScroll, {click:true})
             }
         },
-        mounted(){
+        async mounted(){
+            this[GETSHOPS]();
             this.renderScroll()
         },
         components:{EleStar}

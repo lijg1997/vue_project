@@ -2,22 +2,22 @@
     <section class="profile">
         <headerTop class="header" title="我的"></headerTop>
         <section class="profile-number">
-            <a @click="goto(`/login`)" class="profile-link">
+            <a @click="user ? '' : goto(`/login`)" class="profile-link">
                 <div class="profile_image">
                     <i class="iconfont icon-person"></i>
                 </div>
                 <div class="user-info">
-                    <p class="user-info-top">登录/注册</p>
-                    <p>
+                    <p class="user-info-top" v-if="!user.phone">{{ user.name ? `${user.name}` : `登录/注册`}}</p>
+                    <p v-if="!user.name">
                         <span class="user-icon">
                             <i class="iconfont icon-shouji icon-mobile"></i>
                         </span>
-                        <span class="icon-mobile-number">暂无绑定手机号</span>
+                        <span class="icon-mobile-number">{{user.phone ? `${user.phone}` : `暂无绑定手机号`}}</span>
                     </p>
                 </div>
-                <span class="arrow">
-          <i class="iconfont icon-jiantou1"></i>
-        </span>
+                <span class="arrow" v-show="user" @click="user ? goto(`/userDetail`) : ''">
+                    <i class="iconfont icon-jiantou1"></i>
+                </span>
             </a>
         </section>
         <section class="profile_info_data border-1px">
@@ -39,26 +39,26 @@
         <section class="profile_my_order border-1px">
             <!-- 我的订单 -->
             <a href='javascript:' class="my_order">
-        <span>
-          <i class="iconfont icon-order-s"></i>
-        </span>
+                <span>
+                  <i class="iconfont icon-order-s"></i>
+                </span>
                 <div class="my_order_div">
                     <span>我的订单</span>
                     <span class="my_order_icon">
-            <i class="iconfont icon-jiantou1"></i>
-          </span>
+                        <i class="iconfont icon-jiantou1"></i>
+                      </span>
                 </div>
             </a>
             <!-- 积分商城 -->
             <a href='javascript:' class="my_order">
-        <span>
-          <i class="iconfont icon-jifen"></i>
-        </span>
+                <span>
+                  <i class="iconfont icon-jifen"></i>
+                </span>
                 <div class="my_order_div">
                     <span>积分商城</span>
                     <span class="my_order_icon">
-            <i class="iconfont icon-jiantou1"></i>
-          </span>
+                        <i class="iconfont icon-jiantou1"></i>
+                      </span>
                 </div>
             </a>
             <!-- 硅谷外卖会员卡 -->
@@ -92,8 +92,12 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
         name:'profile',
+        computed:{
+            ...mapState(['user'])
+        },
         methods:{
             goto(path){
                 this.$router.push(path)
@@ -166,14 +170,14 @@
                             font-size 14px
                             color #fff
                 .arrow
-                    width 12px
-                    height 12px
+                    width 20px
+                    height 20px
                     position absolute
                     right 15px
                     top 40%
                     .icon-jiantou1
                         color #fff
-                        font-size 5px
+                        font-size 10px
         .profile_info_data
             bottom-border-1px(#e4e4e4)
             width 100%

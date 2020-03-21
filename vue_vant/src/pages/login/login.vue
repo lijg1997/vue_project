@@ -12,12 +12,18 @@
                 <form>
                     <div :class="{on:loginWay === `message`}">
                         <section class="login_message">
-                            <input v-model.trim="phoneNumber" type="tel" maxlength="11" placeholder="手机号">
-                            <button :disabled="!phoneNumberIsRight" class="get_verification"
-                                :class="{highLight:phoneNumberIsRight}" @click.prevent="getCode">获取验证码</button>
+                            <input type="tel" maxlength="11" placeholder="手机号"
+                                   v-model.trim="phone" name="phone" v-validate="'required|mobile'">
+                            <span style="color: red;" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
+                            <button :disabled="!phoneNumberIsRight || times > 0" class="get_verification"
+                                :class="{highLight:phoneNumberIsRight}" @click.prevent="getCode">
+                                {{times > 0 ? `${times} s` : `获取验证码`}}
+                            </button>
                         </section>
                         <section class="login_verification">
-                            <input type="tel" maxlength="8" placeholder="验证码">
+                            <input type="tel" maxlength="6" placeholder="验证码"
+                                   v-model.trim="code" name="code" v-validate="{required:true, regex:/^\d{6}$/}">
+                            <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
                         </section>
                         <section class="login_hint">
                             温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -27,18 +33,24 @@
                     <div :class="{on:loginWay === `password`}">
                         <section>
                             <section class="login_message">
-                                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                                <input type="tel" placeholder="手机/邮箱/用户名"
+                                       v-model.trim="name" name="name" v-validate="'required'">
+                                <span style="color: red;" v-show="errors.has('name')">{{ errors.first('name') }}</span>
                             </section>
                             <section class="login_verification">
-                                <input type="tel" maxlength="8" placeholder="密码">
-                                <div class="switch_button off">
-                                    <div class="switch_circle"></div>
-                                    <span class="switch_text">...</span>
+                                <input :type="isRight ? 'text' : 'password'" maxlength="16" placeholder="密码"
+                                       v-model.trim="pwd" name="pwd" v-validate="'required'">
+                                <div class="switch_button off" :class="{on:isRight}" @click="isRight = !isRight">
+                                    <div class="switch_circle" :class="{right:isRight}"></div>
+                                    <span class="switch_text">abc</span>
                                 </div>
+                                <span style="color: red;" v-show="errors.has('pwd')">{{ errors.first('pwd') }}</span>
                             </section>
                             <section class="login_message">
-                                <input type="text" maxlength="11" placeholder="验证码">
-                                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                                <input type="text" maxlength="4" placeholder="验证码"
+                                       v-model.trim="captcha" name="captcha" v-validate="{required:true, regex:/^[a-z0-9]+$/i}">
+                                <img class="get_verification" :src="imgCaptcha" alt="captcha" ref="captchaImg" @click="changeCaptcha">
+                                <span style="color: red;" v-show="errors.has('captcha')">{{ errors.first('captcha') }}</span>
                             </section>
                         </section>
                     </div>
@@ -54,26 +66,51 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+    import {USERLOGIN} from '../../store/mutation_types'
     export default {
         name:'login',
         data(){
             return {
                 loginWay:'message',
-                phoneNumber:'',
                 phoneReg:/^1\d{10}/igm,
+                isRight:false,
+                imgCaptcha:'http://localhost:4000/captcha' + '?' + new Date().getTime(),
+                times:0,
+                phone:'',
+                code:'',
+                name:'',
+                pwd:'',
+                captcha:''
             }
         },
         computed:{
             phoneNumberIsRight(){
-                return this.phoneReg.test(this.phoneNumber)
+                return this.phoneReg.test(this.phone)
             }
         },
         methods:{
-            login(){
-                console.log('login')
+            ...mapActions([USERLOGIN]),
+            changeCaptcha(){
+                this.$refs.captchaImg.src = this.imgCaptcha
             },
-            getCode(){
-                console.log('getCode')
+            async getCode(){
+                await this.$http.login.getCode({phone:this.phone});
+                clearInterval(this.timeId);
+                this.times = 30;
+                this.timeId = setInterval(()=>{
+                    if(this.times > 0) this.times--;
+                    else clearInterval(this.timeId)
+                },1000)
+            },
+            async login(){
+                if(this.loginWay === 'message'){
+                    const messageFlag = await this.$validator.validateAll(['phone','code']);
+                    if(messageFlag) this[USERLOGIN]({loginWay:this.loginWay, phone:this.phone, code:this.code});
+                }else if(this.loginWay === 'password'){
+                    const passwordFlag = await this.$validator.validateAll(['name','pwd','captcha']);
+                    if(passwordFlag) this[USERLOGIN]({loginWay:this.loginWay, name:this.name, pwd:this.pwd, captcha:this.captcha, changeCaptcha:this.changeCaptcha})
+                }
             }
         }
     }
@@ -169,8 +206,10 @@
                                         color #ddd
                                 &.on
                                     background #02a774
+                                    .switch_text
+                                        float left
+                                        color #ddd
                                 >.switch_circle
-                                    //transform translateX(27px)
                                     position absolute
                                     top -1px
                                     left -1px
@@ -181,6 +220,8 @@
                                     background #fff
                                     box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                                     transition transform .3s
+                                    &.right
+                                        transform translateX(27px)
                         .login_hint
                             margin-top 12px
                             color #999

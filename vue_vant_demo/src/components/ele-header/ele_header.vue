@@ -18,7 +18,7 @@
       </div>
       <div class="btn" @click="show = true" v-if="sellers.supports">
         <span class="text">{{sellers.supports.length}}个</span>
-        <i class="icon-keyboard_arrow_right right"></i>
+        <i class="shop-keyboard_arrow_right right"></i>
       </div>
     </div>
     <div class="bulletin" @click="show = true">
@@ -26,7 +26,7 @@
         <i class="icon"></i>
         <span class="text">{{sellers.bulletin}}</span>
       </div>
-      <i class="icon-keyboard_arrow_right right"></i>
+      <i class="shop-keyboard_arrow_right right"></i>
     </div>
     <div class="bg">
       <img :src="sellers.bgImg" alt="img">
@@ -48,10 +48,11 @@
           </div>
         </div>
         <div class="footer">
-          <i class="icon-close" @click="show = false"></i>
+          <i class="shop-close" @click="show = false"></i>
         </div>
       </div>
     </transition>
+    <i class="shop-close close" @click="$router.replace('/msite')"></i>
   </div>
 </template>
 
@@ -81,6 +82,13 @@ export default {
   background-color rgba(7,17,27,.5)
   position relative
   overflow hidden
+  &>.close
+    position: absolute
+    right 5px
+    top 5px
+    z-index 99
+    font-size 25px
+    color white
   &>.top
     padding 24px 0 18px 24px
     position relative
@@ -184,7 +192,7 @@ export default {
     padding-top 64px
     overflow-y auto
     background-color rgba(7,17,27,.8)
-    z-index 9
+    z-index 9999
     backdrop-filter blur(3px)
     .main-wrap
       min-height 100%

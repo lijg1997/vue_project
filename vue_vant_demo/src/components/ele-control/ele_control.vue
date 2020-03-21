@@ -1,12 +1,12 @@
 <template>
 <div class="control">
   <transition name="removeCount">
-    <i class="icon-remove_circle_outline" v-if="food.count" @click="handleDecrement"></i>
+    <i class="shop-remove_circle_outline" v-if="food.count" @click="handleDecrement"></i>
   </transition>
   <transition name="removeCount">
     <span class="count" v-if="food.count">{{food.count}}</span>
   </transition>
-  <i class="icon-add_circle active" @click="handleIncrement"></i>
+  <i class="shop-add_circle active" @click="handleIncrement"></i>
 </div>
 </template>
 

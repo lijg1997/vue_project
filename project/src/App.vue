@@ -1,61 +1,33 @@
 <template>
-  <div id="app">
-    <EleHeader :seller="seller"></EleHeader>
-    <div class="navs">
-      <div class="item">
-        <router-link to="/goods">商品</router-link>
-      </div>
-      <div class="item">
-        <router-link to="/ratings">评价</router-link>
-      </div>
-      <div class="item">
-        <router-link to="/sellers">商家</router-link>
-      </div>
+    <div id="app">
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
+        <FooterGuide v-show="this.$route.meta.showFooter"></FooterGuide>
     </div>
-    <router-view :seller="seller"></router-view>
-  </div>
 </template>
 
 <script>
-import EleHeader from 'components/eleHader/eleHeader'
-const OK = 0
-export default {
-  name: 'App',
-  data(){
-    return {
-      seller: {}
+    import {mapActions} from 'vuex'
+    import {AUTOLOGIN} from 'store/mutation_types'
+    import FooterGuide from 'components/footerGuide/footerGuide'
+    export default {
+        name: 'App',
+        methods:{
+            ...mapActions([AUTOLOGIN])
+        },
+        created(){
+            this[AUTOLOGIN]()
+        },
+        components: {
+            FooterGuide
+        },
     }
-  },
-  components: {
-    EleHeader,
-  },
-  async mounted() {
-    const {errno, data:seller} = await this.axios.get('/api/seller')
-    if(errno === OK) this.seller = seller
-  },
-}
 </script>
 
 <style scoped lang="stylus">
-@import "./common/stylus/mixin.styl"
-#app
-  position relative
-  width 100%
-  height 100%
-  .navs
-    one-px(rgba(7,17,27,.2))
-    display flex
-    height 40px
-    line-height 40px
-    .item
-      flex 1
-      text-align center
-      a
-        display inline-block
+    #app
         width 100%
         height 100%
-        font-size 14px
-        color rgb(77, 85, 93)
-        &.active
-          color rgb(240, 20, 20)
+        overflow hidden
 </style>

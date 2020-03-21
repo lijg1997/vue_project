@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {
+        name:'lijg',
+        age:23
+    }
+    Object.defineProperty(obj,'wife',{
+        get(){
+            console.log('get')
+            return this.__wife__
+        },
+        set(val){
+            console.log('set', val)
+            if(typeof val === 'string')
+                this.__wife__ = val
+        },
+        enumerable: false,
+        configurable: false
+    })
+    obj.wife = 111
+    console.log(obj.wife)
+    console.log(Object.getOwnPropertyDescriptor(obj,'wife'))
+</script>
+</body>
+</html>

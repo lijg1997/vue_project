@@ -1,7 +1,9 @@
 <template>
-<ul class="stars" :class="`stars-${size}`">
-  <li class="star" v-for="(item, index) in scoreArr" :key="index" :class="item"></li>
-</ul>
+<div class="starWrap">
+  <i class="star" v-for="(item, index) in scoreArr"
+     :key="index" :class="[`star-${size}`, `${item}`]"
+      :style="{marginRight:MR + `px !important`}"></i>
+</div>
 </template>
 
 <script>
@@ -12,37 +14,37 @@ const LENGTH = 5
 export default {
   props:{
     size:Number,
-    score:Number
+    score:Number,
+    MR:Number
   },
   computed: {
-    scoreArr(){
-      let arr = []
-      const score = Math.floor(this.score * 2) / 2
-      const hasHalf = (score % 1 === 0) ? false : true
-      const onNum = Math.floor(score)
-      for(let i = 0; i < onNum; i++) {
-        if(i > LENGTH) break
-        arr.push(ON)
+    scoreArr() {
+      let scoreArr = []
+      let score = Math.floor(this.score * 2) / 2
+      let hasHalf = (score % 1 === 0) ? false : true
+      let onCount = Math.floor(this.score)
+      for(let i = 0; i < onCount; i++){
+        if(i > LENGTH) return
+        scoreArr.push(ON)
       }
-      hasHalf ? arr.push(HALF) : ''
-      while(arr.length < LENGTH){
-        arr.push(OFF)
+      hasHalf ? scoreArr.push(HALF) : ''
+  
+      while(scoreArr.length < LENGTH){
+        scoreArr.push(OFF)
       }
-      return arr
+      return scoreArr
     }
-  }
+  },
 };
 </script>
 
 <style scoped lang="stylus">
-@import '../../common/stylus/mixin.styl'
-.stars
-  display flex
+@import '../../common/stylus/extends.styl'
+@import '../../common/stylus/mixins.styl'
+.starWrap
+  @extend .center
   .star
-    background-size 100%
-    background-repeat no-repeat
-  &.stars-24
-    .star
+    &.star-24
       width 10px
       height 10px
       margin-right 10px
@@ -54,8 +56,7 @@ export default {
         bg-image(star24_half)
       &.off
         bg-image(star24_off)
-  &.stars-36
-    .star
+    &.star-36
       width 15px
       height 15px
       margin-right 15px
@@ -66,9 +67,8 @@ export default {
       &.half
         bg-image(star36_half)
       &.off
-        bg-image(star36_off)  
-  &.stars-48
-    .star
+        bg-image(star36_off)
+    &.star-48
       width 20px
       height 20px
       margin-right 20px
@@ -79,6 +79,5 @@ export default {
       &.half
         bg-image(star48_half)
       &.off
-        bg-image(star48_off)  
-
+        bg-image(star48_off)
 </style>

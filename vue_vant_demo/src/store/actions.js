@@ -1,15 +1,16 @@
+import Swal from 'sweetalert2'
 import {GETADDRESSOBJ, GETCATEGORIES, GETSHOPS,
     LOGIN, LOGOUT, AUTOLOGIN, GETSELLERS, GETGOODS} from './mutation_types'
 import $http from '../http'
 import toast from '../util/toast'
-import router from '../router'
+import $router from '../router'
 const OK = 0;
 const ERROR = 1;
 const NOTOKEN = 1;
 function loginSuccess(commit, user, loginWay, changeCaptcha) {
     commit(LOGIN, user);
     localStorage.setItem('ele-token', user.token);
-    router.replace('/profile');
+    $router.replace('/profile');
     if(loginWay === 'password') changeCaptcha();
     toast.success('登录成功')
 }
@@ -38,31 +39,33 @@ export default {
         else if(body.code === ERROR) loginFail(body.msg, loginWay, changeCaptcha)
     },
     [LOGOUT]({commit}){
+        localStorage.removeItem('ele-token');
+        $router.replace('/login')
         commit(LOGOUT)
     },
     async [AUTOLOGIN]({commit}){
         try {
-            console.log('++++');
             const body = await $http.login.autoLogin();
             if(body.code === OK) commit(AUTOLOGIN, body.data);
             else if(body.code === NOTOKEN){
-                alert(body.msg);
-                router.replace('/login')
+                localStorage.removeItem('ele-token');
+                commit(LOGOUT);
+                if($router.history.current.path !== '/login')
+                    Swal.fire(body.msg);
             }
         }catch (e) {
-            console.log('----');
-            alert(e.response.data.message);
-            router.replace('/login')
+            localStorage.removeItem('ele-token');
+            commit(LOGOUT);
+            Swal.fire(e.response.data.message);
         }
     },
-    async [GETSELLERS]({commit}){
+    async [GETSELLERS]({commit},id){
+        console.log(id);
         const body = await $http.mock.getSellers();
-        console.log(body)
         if(body.errno === OK) commit(GETSELLERS, body.data)
     },
     async [GETGOODS]({commit}){
         const body = await $http.mock.getGoods();
-        console.log(body)
         if(body.errno === OK) commit(GETGOODS, body.data)
     },
 }

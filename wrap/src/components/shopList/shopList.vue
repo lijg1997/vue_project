@@ -63,14 +63,14 @@
         methods:{
             ...mapActions([GETSHOPS]),
             renderScroll(){
-                new BScroll(this.$refs.shopScroll, {click:true})
+                this.$refs.shopScroll && new BScroll(this.$refs.shopScroll, {click:true})
             }
         },
         async mounted(){
-            // if(this.user){
+            if(this.user){
                 await this[GETSHOPS]();
                 this.renderScroll()
-            // }
+            }
         },
         components:{
             EleStar

@@ -30,7 +30,7 @@
                 <div class="swiper-pagination"></div>
             </div>
         </nav>
-        <ShopList :shops="shops" :imgBaseUrl="imgBaseUrl"></ShopList>
+        <ShopList></ShopList>
     </div>
 </template>
 
@@ -39,37 +39,33 @@
     import 'swiper/css/swiper.min.css'
     import _ from 'lodash'
     import {mapState, mapActions} from 'vuex'
-    import {GETADDRESSOBJ, GETCATEGORIES, GETSHOPS} from 'store/mutation_types'
+    import {GETADDRESSOBJ, GETCATEGORIES} from 'store/mutation_types'
     import ShopList from 'components/shopList/shopList'
     export default {
         name:'msite',
         computed:{
-            ...mapState(['addressObj','categories','shops','imgBaseUrl', 'user']),
+            ...mapState(['addressObj','categories','imgBaseUrl','shops']),
             categoryArrs(){
                 return _.chunk(this.categories, 8)
             }
         },
         methods:{
-            ...mapActions([GETADDRESSOBJ, GETCATEGORIES, GETSHOPS]),
+            ...mapActions([GETADDRESSOBJ, GETCATEGORIES]),
             renderSwiper(){
-                this.$nextTick(()=>{
-                    new Swiper ('.swiper-container', {
-                        // direction: 'vertical', // 垂直切换选项
-                        // loop: true, // 循环模式选项
-                        pagination: { // 如果需要分页器
-                            el: '.swiper-pagination',
-                        },
-                    })
+                new Swiper ('.swiper-container', {
+                    // direction: 'vertical', // 垂直切换选项
+                    // loop: true, // 循环模式选项
+                    pagination: { // 如果需要分页器
+                        el: '.swiper-pagination',
+                    },
                 })
             }
         },
         async mounted(){
-            if(this.user){
-                await this[GETADDRESSOBJ]();
-                await this[GETCATEGORIES]();
-                await this[GETSHOPS]();
-                this.renderSwiper()
-            }
+            // console.log('===')
+            this[GETADDRESSOBJ]();
+            await this[GETCATEGORIES]();
+            this.renderSwiper()
         },
         components:{ShopList}
     }

@@ -25,30 +25,30 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
+import {GETGOODS} from 'store/mutation_types'
 import BScroll from 'better-scroll'
 import EleIcon from 'components/eleIcon/eleIcon'
 import EleFood from 'components/eleFood/eleFood'
 import EleCart from 'components/eleCart/eleCart'
 const OK = 0
 export default {
-  props:{
-    seller:Object
-  },
+  name:'eleGoods',
   data() {
     return {
-      goods:[],
       tops:[],
       scrollY:0
     };
   },
   computed: {
+    ...mapState(['seller', 'goods']),
     currentIndex(){
       let {tops, scrollY} = this
       let index = 0
       index = tops.findIndex((item, index) => scrollY >= item && scrollY < tops[index + 1])
       if(this.oldIndex !== index){
         this.oldIndex = index
-        let goodsItem = this.$refs.goodsList.children[index]
+        let goodsItem = this.$refs.goodsList && this.$refs.goodsList.children[index]
         this.goodsScroll && this.goodsScroll.scrollToElement(goodsItem, 300)
       }
       return index
@@ -63,12 +63,8 @@ export default {
       return selectedFoodCount
     }
   },
-  components:{
-    EleIcon, 
-    EleFood,
-    EleCart
-  },
   methods: {
+    ...mapActions([GETGOODS]),
     handleCToGoodsItem(index){
       let top = this.tops[index]
       this.foodsScroll.scrollTo(0, -top, 500)
@@ -97,13 +93,10 @@ export default {
     }
   },
   async mounted() {
-    const {errno, data:goods} = await this.axios.get('/api/goods')
-    if(errno === OK) this.goods = goods
+    await this[GETGOODS]();
     // 当DOM再次更新的时候触发，确保能获取所有DOM数据
-    this.$nextTick(() => {
-      this.initScroll()
-      this.initTop()
-    })
+    this.initScroll()
+    this.initTop()
     // 增加count
     this.bus.$on('handleIncrement', (food) => {
       if(food.count){
@@ -117,6 +110,11 @@ export default {
         food.count--
       }
     })
+  },
+  components:{
+    EleIcon,
+    EleFood,
+    EleCart
   },
 };
 </script>

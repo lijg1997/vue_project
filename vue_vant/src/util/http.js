@@ -16,7 +16,10 @@ export default (axios, api)=>{
             if(hooks){
                 httpUtil[name].beforeReq = hooks.beforeReq;
                 httpUtil[name].afterReq = hooks.afterReq;
-                url = hooks.corsUrl + url
+                if(hooks.corsUrl){
+                    url = hooks.corsUrl + url;
+                    hooks.corsUrl = ''
+                }
             }
             let body = {};
             switch (method) {
@@ -26,7 +29,10 @@ export default (axios, api)=>{
                     body = await axios({
                         url,
                         method,
-                        params:transformData
+                        params:transformData,
+                        headers:{
+                            Authorization: hooks && hooks.token && hooks.token || ''
+                        }
                     });
                     httpUtil[name].afterReq && httpUtil[name].afterReq();
                     break;
@@ -36,7 +42,10 @@ export default (axios, api)=>{
                     body = await axios({
                         url,
                         method,
-                        data:transformData
+                        data:transformData,
+                        headers:{
+                            Authorization: hooks && hooks.token && hooks.token || ''
+                        }
                     });
                     httpUtil[name].afterReq && httpUtil[name].afterReq();
                     break

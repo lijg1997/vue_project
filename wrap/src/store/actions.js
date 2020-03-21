@@ -49,14 +49,15 @@ export default {
     async [AUTOLOGIN]({commit}){
         try {
             const body = await $http.login.autoLogin();
-            if(body.code === OK) commit(AUTOLOGIN, body.data);
-            else if(body.code === NOTOKEN){
+            if(body.code === OK){
+                commit(AUTOLOGIN, body.data);
+            }else if(body.code === NOTOKEN){
                 alert(body.msg);
                 $router.replace('/login')
             }
         }catch (e) {
-            console.log('------');
-            console.log(e);
+            alert(e.response.data.message);
+            // console.dir(e)
             $router.replace('/login')
         }
     }

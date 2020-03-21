@@ -28,6 +28,7 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
+import {GETGOODS} from 'store/mutation_types'
 import BScroll from 'better-scroll'
 import EleIcon from 'components/ele-icon/ele_icon'
 import EleFood from 'components/ele-food/ele_food'
@@ -42,19 +43,15 @@ export default {
   computed: {
     ...mapState(['sellers', 'goods']),
     currentIndex(){
-      this.$nextTick(()=>{
-        setTimeout(()=>{
-          let {tops, scrollY} = this
-          let index = 0
-          index = tops.findIndex((item, index) => scrollY >= item && scrollY < tops[index + 1])
-          if(this.oldIndex !== index){
-            let targetLi =  this.$refs.typeList.children[index]
-            this.typeScroll && this.typeScroll.scrollToElement(targetLi, 300)
-            this.oldIndex = index
-          }
-          return index
-        })
-      })
+      let {tops, scrollY} = this
+      let index = 0
+      index = tops.findIndex((item, index) => scrollY >= item && scrollY < tops[index + 1])
+      if(this.oldIndex !== index){
+        let targetLi =  this.$refs.typeList && this.$refs.typeList.children[index]
+        this.typeScroll && this.typeScroll.scrollToElement(targetLi, 300)
+        this.oldIndex = index
+      }
+      return index
     },
     selectedFoods(){
       let selectedFoods = []
@@ -67,39 +64,30 @@ export default {
     }
   },
   methods: {
+    ...mapActions([GETGOODS]),
     // 初始化滚动条
     _initScroll(){
-      this.$nextTick(() => {
-      //   setTimeout(()=>{
-          this.typeScroll = new BScroll(this.$refs.typeWrap, {click:true})
-          this.foodsScroll = new BScroll(this.$refs.foodsWrap, {probeType:3, click:true})
-          this.foodsScroll.on('scroll', ({x,y}) => {
-            this.scrollY = Math.abs(y)
-          })
-        // })
+      this.typeScroll = new BScroll(this.$refs.typeWrap, {click:true})
+      this.foodsScroll = new BScroll(this.$refs.foodsWrap, {probeType:3, click:true})
+      this.foodsScroll.on('scroll', ({x,y}) => {
+        this.scrollY = Math.abs(y)
       })
     },
     // 初始化top
     _initTops(){
-      this.$nextTick(()=>{
-      //   setTimeout(()=>{
-          let top = 0
-          let tops = [top]
-          let foodsItem = this.$refs.foodList.children
-          Array.from(foodsItem).forEach((item) => {
-            top += item.offsetHeight
-            tops.push(top)
-          })
-          this.tops = tops
-        // })
+      let top = 0
+      let tops = [top]
+      let foodsItem = this.$refs.foodList && this.$refs.foodList.children
+      Array.from(foodsItem).forEach((item) => {
+        top += item.offsetHeight
+        tops.push(top)
       })
+      this.tops = tops
     },
     // 点击左侧导航右侧滑动
     handleCToTypeItem(index){
-      this.$nextTick(()=>{
         let top = this.tops[index]
         this.foodsScroll.scrollTo(0, -top, 500)
-      })
     },
     clear(){
       this.selectedFoods.forEach((selectedFood) => {
@@ -108,6 +96,7 @@ export default {
     }
   },
   async mounted() {
+    await this[GETGOODS]()
     this._initScroll()
     this._initTops()
     // 添加商品数量

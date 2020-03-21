@@ -17,7 +17,7 @@
     </div>
     <div class="btn" @click="maskShow = true"  v-if="seller.supports">
       <span class="text">{{seller.supports.length}}</span>
-      <i class="icon-keyboard_arrow_right right"></i>
+      <i class="shop-keyboard_arrow_right right"></i>
     </div>
   </div>
   <div class="bulletin" @click="maskShow = true">
@@ -27,7 +27,7 @@
         {{seller.bulletin}}
       </span>
     </div>
-    <i class="icon-keyboard_arrow_right right"></i>
+    <i class="shop-keyboard_arrow_right right"></i>
   </div>
   <div class="bg">
     <img :src="seller.bgImg" alt="bg">
@@ -47,26 +47,28 @@
         </div>
       </div>
       <div class="btn">
-        <i class="icon-close close" @click="maskShow = false"></i>
+        <i class="shop-close close" @click="maskShow = false"></i>
       </div>
     </div>
   </transition>
+  <div class="shop-close close" @click="$router.replace('/msite')"></div>
 </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import EleIcon from '../eleIcon/eleIcon'
 import EleLine from '../eleLine/eleLine'
 import EleList from '../eleList/eleList'
 import EleStar from '../eleStar/eleStar'
 export default {
-  props:{
-    seller:Object    
-  },
   data() {
     return {
       maskShow:false
     };
+  },
+  computed:{
+    ...mapState(['seller'])
   },
   components:{
     EleIcon,
@@ -84,6 +86,12 @@ export default {
   font-size 0
   background-color rgba(7, 17, 27, .5)
   overflow hidden
+  &>.close
+    position: absolute
+    right 5px
+    top 5px
+    font-size 25px
+    color white
   &>.top
     padding 24px 0 18px 24px
     position relative

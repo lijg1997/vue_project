@@ -13,7 +13,8 @@ module.exports = {
     resolve: {
       alias: {
         components: resolve('src/components'),
-        pages: resolve('src/pages')
+        pages: resolve('src/pages'),
+        store: resolve('src/store')
       }
     }
   }

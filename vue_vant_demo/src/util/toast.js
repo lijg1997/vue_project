@@ -3,17 +3,16 @@ export default{
     loading(){
         Toast.loading({
             message: 'Loading...',
-            forbidClick: true,
-            duration:0
+            forbidClick: true
         });
     },
-    success(val){
+    success(val = 'success'){
         Toast.success({
             message: val,
             duration:3000
         });
     },
-    fail(err){
+    fail(err = 'fail'){
         Toast.fail({
             message: err,
             duration:3000

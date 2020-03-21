@@ -1,3 +1,4 @@
+const token = localStorage.getItem('login_token');
 export default {
     baseUrl:'',
     timeout:10000,
@@ -13,15 +14,18 @@ export default {
             url: '/index_category',
             method: 'get',
             hooks: {
-                corsUrl:'/4000'
+                corsUrl:'/4000',
+                token
             }
         },
         getShop: {
             url: '/shops',
             method: 'get',
             hooks: {
-                corsUrl:'/4000'
+                corsUrl:'/4000',
+                token
             }
         }
-    }
+    },
+    cancleToast: false
 }

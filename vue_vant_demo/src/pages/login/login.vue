@@ -67,7 +67,7 @@
                 </form>
                 <a href="javascript:;" class="about_us">关于我们</a>
             </div>
-            <span href="javascript:" class="go_back" @click="$router.back()">
+            <span href="javascript:" class="go_back" @click="$router.replace('/profile')">
         <i class="iconfont icon-jiantou2"></i>
       </span>
         </div>
@@ -118,10 +118,15 @@
             async userLogin(){
                 if(this.loginWay === 'message'){
                     const messageFlag = await this.$validator.validateAll(['phone', 'code']);
-                    if(messageFlag) this[LOGIN]({loginWay:this.loginWay, phone:this.phone, code:this.code})
+                    if(messageFlag) this[LOGIN]({loginWay:this.loginWay, phone:this.phone, code:this.code});
+                    this.phone = '';
+                    this.code = ''
                 }else if(this.loginWay === 'password'){
                     const passwordFlag = await this.$validator.validateAll(['name', 'pwd', 'captcha']);
                     if(passwordFlag) this[LOGIN]({loginWay:this.loginWay, name:this.name, pwd:this.pwd, captcha:this.captcha, changeCaptcha:this.changeCaptcha})
+                    this.name = '';
+                    this.pwd = '';
+                    this.captcha = ''
                 }
             },
             changeCaptcha(){

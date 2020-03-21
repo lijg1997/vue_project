@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <span>{{name}}</span>
+    <span v-text="obj.msg.title"></span>
+    <span>{{wife}}</span>
+    <span>{{msg}}</span>
+</div>
+</body>
+<script src="MVVM/observer.js"></script>
+<script src="MVVM/mvvm.js"></script>
+<script src="MVVM/compile.js"></script>
+<script src="MVVM/watcher.js"></script>
+<script>
+    const vm = new MVVM({
+        el:'#app',
+        data:{
+            name:'lijg',
+            obj:{
+                msg:{
+                    title:'love'
+                }
+            },
+            wife:'chaochao',
+            msg:'1314',
+            // a:1,
+            // b:2,
+            // c:3,
+            // d:4,
+            // e:5,
+            // f:[[[[]]]],
+            // g:{a:{b:{c:{d:{e:{}}}}}}
+        }
+    })
+</script>
+</html>

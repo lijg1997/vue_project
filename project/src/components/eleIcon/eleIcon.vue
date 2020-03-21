@@ -1,5 +1,5 @@
 <template>
-  <i class="icon" :class="[`icon-${size}`, `${listArr[type]}`]"></i>
+  <i class="icon" :class="[`shop-${size}`, `${listArr[type]}`]"></i>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
   background-repeat no-repeat
   display inline-block
   margin-right 4px
-  &.icon-1
+  &.shop-1
     width 12px
     height 12px
     &.decrease
@@ -34,7 +34,7 @@ export default {
       bg-image(invoice_1)
     &.special
       bg-image(special_1)
-  &.icon-2
+  &.shop-2
     width 16px
     height 16px
     &.decrease
@@ -47,7 +47,7 @@ export default {
       bg-image(invoice_2)
     &.special
       bg-image(special_2)
-  &.icon-3
+  &.shop-3
     width 12px
     height 12px
     &.decrease
@@ -60,7 +60,7 @@ export default {
       bg-image(invoice_3)
     &.special
       bg-image(special_3)
-  &.icon-4
+  &.shop-4
     width 16px
     height 16px
     &.decrease

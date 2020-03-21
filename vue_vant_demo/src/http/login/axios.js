@@ -8,19 +8,19 @@ const contact = axios.create({
 });
 
 contact.interceptors.request.use((reqConfig)=>{
-    toast.loading();
+    config.cancleToast ? '' : toast.loading();
     config.hooks && config.hooks.beforeReq && config.hooks.beforeReq();
     return reqConfig
 });
 
 contact.interceptors.response.use((response)=>{
-    toast.success();
+    config.cancleToast ? '' : toast.success();
     config.hooks && config.hooks.afterReq && config.hooks.afterReq();
     return response.data
 }, (err)=>{
-    toast.fail();
+    config.cancleToast ? '' : toast.fail();
     config.hooks && config.hooks.afterReq && config.hooks.afterReq();
-    return new Promise(()=>{})
+    return Promise.reject(err)
 });
 
 export default contact
